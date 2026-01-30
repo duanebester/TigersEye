@@ -1,0 +1,22 @@
+# Zig
+.zig-cache/
+zig-out/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# TigerbeetleDB data files
+*.tigerbeetle
+
+# Build artifacts
+*.o
+*.a
+
+# Keep the lib directory structure but ignore binaries
+vendor/tigerbeetle/lib/*.dylib
+vendor/tigerbeetle/lib/*.so
+vendor/tigerbeetle/lib/*.dll
