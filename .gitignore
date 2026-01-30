@@ -9,7 +9,8 @@ zig-out/
 .vscode/
 .idea/
 
-# TigerbeetleDB data files
+# TigerbeetleDB
+/tigerbeetle
 *.tigerbeetle
 
 # Build artifacts

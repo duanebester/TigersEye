@@ -2,6 +2,8 @@
 
 A beautiful TigerbeetleDB GUI client built with [Gooey](https://github.com/duanebester/gooey).
 
+<img src="https://github.com/duanebester/TigersEye/blob/main/assets/screengrab.png" height="200px" />
+
 ## Features
 
 - **Real-time account management** - View, create, and manage TigerbeetleDB accounts
@@ -11,6 +13,8 @@ A beautiful TigerbeetleDB GUI client built with [Gooey](https://github.com/duane
 - **Thread-safe async** - GCD-based dispatcher for smooth UI updates
 
 ## Prerequisites
+
+> Note: Only MacOS support for now. Gooey supports Linux (and WebGPU!), but I haven't gotten there yet.
 
 1. **Zig 0.15.2 or later**
 2. **TigerbeetleDB server running locally**
@@ -78,14 +82,14 @@ const USE_ECHO_CLIENT = false;              // true for testing without server
 
 TigersEye uses TigerbeetleDB's official color palette:
 
-| Color  | Hex       | Usage                |
-|--------|-----------|----------------------|
-| Lime   | `#c4f042` | Primary actions      |
-| Cyan   | `#8ae8ff` | Links, highlights    |
-| Mint   | `#93fdb5` | Success, credits     |
-| Purple | `#9e8cfc` | Secondary actions    |
-| Yellow | `#ffef5c` | Warnings             |
-| Danger | `#f16153` | Errors, debits       |
+| Color  | Hex       | Usage             |
+| ------ | --------- | ----------------- |
+| Lime   | `#c4f042` | Primary actions   |
+| Cyan   | `#8ae8ff` | Links, highlights |
+| Mint   | `#93fdb5` | Success, credits  |
+| Purple | `#9e8cfc` | Secondary actions |
+| Yellow | `#ffef5c` | Warnings          |
+| Danger | `#f16153` | Errors, debits    |
 
 ## License
 
