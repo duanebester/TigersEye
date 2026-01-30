@@ -2,7 +2,7 @@
 
 A beautiful TigerbeetleDB GUI client built with [Gooey](https://github.com/duanebester/gooey).
 
-<img src="https://github.com/duanebester/TigersEye/blob/main/assets/screengrab.png" height="200px" />
+<img src="https://github.com/duanebester/TigersEye/blob/main/assets/screengrab.png" height="500px" />
 
 ## Features
 
