@@ -22,7 +22,7 @@ A beautiful TigerbeetleDB GUI client built with [Gooey](https://github.com/duane
    # Start a local TigerbeetleDB instance
    ./tigerbeetle start --addresses=3000 ./0_0.tigerbeetle
    ```
-3. **TigerbeetleDB client library** (`libtb_client.dylib` for macOS)
+3. **TigerbeetleDB client library** (`libtb_client.dylib` for macOS, `libtb_client.so` for Linux)
    - Place in `vendor/tigerbeetle/lib/`
 
 ## Building
