@@ -29,9 +29,6 @@ pub const OperationResult = types.OperationResult;
 pub const Account = types.Account;
 pub const Transfer = types.Transfer;
 
-// Platform-specific dispatcher for thread-safe UI updates
-const Dispatcher = platform.mac.dispatcher.Dispatcher;
-
 // =============================================================================
 // AppState
 // =============================================================================
@@ -136,10 +133,11 @@ pub const AppState = struct {
     last_completed_sequence: std.atomic.Value(u32) = std.atomic.Value(u32).init(0),
 
     // Rate limiting (TB IO thread needs settling time)
-    last_callback_timestamp_ns: std.atomic.Value(i128) = std.atomic.Value(i128).init(0),
+    // Note: Using i64 instead of i128 because i128 atomics aren't supported on x86_64.
+    // i64 nanoseconds gives us ~292 years of range, which is plenty.
+    last_callback_timestamp_ns: std.atomic.Value(i64) = std.atomic.Value(i64).init(0),
 
     gooey_ptr: ?*gooey.Gooey = null,
-    dispatcher: Dispatcher = Dispatcher.init(std.heap.page_allocator),
 
     // =========================================================================
     // State Transition Guards (Phase 1 Refactoring)
@@ -190,7 +188,7 @@ pub const AppState = struct {
         const last = self.last_callback_timestamp_ns.load(.acquire);
         if (last == 0) return false;
 
-        const now: i128 = std.time.nanoTimestamp();
+        const now: i64 = @truncate(std.time.nanoTimestamp());
         return (now - last) < tb_client.MIN_CALLBACK_GAP_NS;
     }
 
@@ -290,9 +288,9 @@ pub const AppState = struct {
             log.debug("queryAccounts: rate limited, deferring", .{});
             self.current_op = .none; // Reset, will retry
 
-            // Schedule retry via dispatcher
+            // Schedule retry via Gooey's dispatcher (Phase 5)
             const Ctx = struct { app: *Self, g: *gooey.Gooey };
-            self.dispatcher.dispatchAfter(
+            g.dispatchAfter(
                 tb_client.SETTLE_DELAY_NS,
                 Ctx,
                 .{ .app = self, .g = g },
@@ -486,7 +484,7 @@ pub const AppState = struct {
 
         // Defer submission by 50ms to let IO thread settle (per TIGERBEETLE_UI.md gotcha #7)
         const Ctx = struct { app: *Self, g: *gooey.Gooey };
-        self.dispatcher.dispatchAfter(
+        g.dispatchAfter(
             tb_client.SETTLE_DELAY_NS,
             Ctx,
             .{ .app = self, .g = g },
@@ -626,7 +624,11 @@ pub const AppState = struct {
     const DispatchCtx = struct { app: *Self };
 
     pub fn dispatchToMain(self: *Self) void {
-        self.dispatcher.dispatchOnMainThread(
+        const g = self.gooey_ptr orelse {
+            log.err("dispatchToMain: gooey_ptr not set", .{});
+            return;
+        };
+        g.dispatchOnMainThread(
             DispatchCtx,
             .{ .app = self },
             dispatchHandler,

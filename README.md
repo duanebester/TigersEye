@@ -14,7 +14,7 @@ A beautiful TigerbeetleDB GUI client built with [Gooey](https://github.com/duane
 
 ## Prerequisites
 
-> Note: Only MacOS support for now. Gooey supports Linux (and WebGPU!), but I haven't gotten there yet.
+> Note: Only MacOS & Linux support
 
 1. **Zig 0.15.2 or later**
 2. **TigerbeetleDB server running locally**

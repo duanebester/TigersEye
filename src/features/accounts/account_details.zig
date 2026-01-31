@@ -52,7 +52,7 @@ pub const AccountDetails = struct {
                         .background = theme.lime,
                     }, .{}),
                     ui.vstack(.{ .gap = 4 }, .{
-                        ui.textFmt("Account {}", .{account.id}, .{
+                        ui.textFmt("Account {}", .{account.shortId()}, .{
                             .size = 22,
                             .weight = .bold,
                             .color = theme.text,

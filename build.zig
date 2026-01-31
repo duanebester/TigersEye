@@ -41,12 +41,14 @@ pub fn build(b: *std.Build) void {
     // Link TigerbeetleDB client library
     // Check for dynamic library first, then static
     const dylib_path = b.path("vendor/tigerbeetle/lib/libtb_client.dylib");
+    const so_path = b.path("vendor/tigerbeetle/lib/libtb_client.so");
     const static_path = b.path("vendor/tigerbeetle/lib/libtb_client.a");
 
     const dylib_exists = std.fs.cwd().access(dylib_path.getPath(b), .{}) catch null;
+    const so_exists = std.fs.cwd().access(so_path.getPath(b), .{}) catch null;
     const static_exists = std.fs.cwd().access(static_path.getPath(b), .{}) catch null;
 
-    if (dylib_exists != null or static_exists != null) {
+    if (dylib_exists != null or so_exists != null or static_exists != null) {
         exe.addLibraryPath(b.path("vendor/tigerbeetle/lib"));
         exe.linkSystemLibrary("tb_client");
         exe.linkLibC();
@@ -54,7 +56,7 @@ pub fn build(b: *std.Build) void {
         std.log.warn(
             \\TigerbeetleDB client library not found!
             \\
-            \\Please place libtb_client.dylib (macOS) or libtb_client.a in:
+            \\Please place libtb_client.dylib (macOS), libtb_client.so (Linux), or libtb_client.a in:
             \\  vendor/tigerbeetle/lib/
             \\
             \\You can get it from:

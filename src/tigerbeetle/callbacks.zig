@@ -131,7 +131,7 @@ pub fn createCompletionCallback(comptime AppState: type) fn (usize, *tb.Packet, 
             defer self.packet_pool.release(packet);
 
             // Update rate limit timestamp
-            self.last_callback_timestamp_ns.store(std.time.nanoTimestamp(), .release);
+            self.last_callback_timestamp_ns.store(@truncate(std.time.nanoTimestamp()), .release);
 
             // Update sequence tracking
             const seq = self.request_sequence.load(.acquire);
